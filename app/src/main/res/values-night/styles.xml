@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="Widget.Theme.ShadowDarkTimer.MyView" parent="">
+        <item name="android:background">@color/grey_section_bg</item>
+        <item name="exampleColor">@color/red_app_bg</item>
+    </style>
+</resources>
