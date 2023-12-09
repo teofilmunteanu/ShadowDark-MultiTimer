@@ -10,8 +10,9 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="450dp"
+        android:layout_width="0dp"
         android:layout_height="90dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
         android:background="@color/grey_section_bg"
@@ -19,12 +20,78 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/globalPause"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_buttons_bg"
+            android:fontFamily="sans-serif-medium"
+            android:text=" &#9612;&#9612;"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5" />
+
+        <Button
+            android:id="@+id/globalBackward"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_buttons_bg"
+            android:text="\u23EE"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/globalTimeChangeInput"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:gravity="center"
+            android:hint="mm:ss"
+            android:inputType="time"
+            android:maxLines="1"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/globalForward"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_buttons_bg"
+            android:text="\u23ED"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="450dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="32dp"
         android:background="@color/grey_section_bg"
@@ -35,39 +102,224 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-        <LinearLayout
-            android:layout_width="326dp"
-            android:layout_height="71dp"
-            android:layout_marginVertical="15dp"
-            android:background="@color/grey_subsection_bg"
-            android:orientation="horizontal">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarStyle="insideOverlay"
+            tools:visibility="visible">
 
-            <EditText
-                android:id="@+id/rectangularInput"
-                android:layout_width="181dp"
-                android:layout_height="58dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:background="@color/white"
-                android:gravity="center"
-                android:hint="hh:mm:ss"
-                android:padding="10dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="166dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/red_buttons_bg"
-                android:text="&#9199;"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="15dp"
+                    android:background="@color/grey_subsection_bg"
+                    android:orientation="horizontal">
 
-        </LinearLayout>
+                    <EditText
+                        android:id="@+id/rectangularInput2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:hint="hh:mm:ss"
+                        android:inputType="time"
+                        android:maxLines="1"
+                        android:padding="10dp" />
+
+                    <Button
+                        android:id="@+id/pause2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red_buttons_bg"
+                        android:fontFamily="sans-serif-medium"
+                        android:text=" &#9612;&#9612;"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                    <Button
+                        android:id="@+id/backward2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red_buttons_bg"
+                        android:text="\u23EE"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/timeChangeInput2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="2"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:hint="mm:ss"
+                        android:inputType="time"
+                        android:maxLines="1"
+                        android:padding="10dp" />
+
+                    <Button
+                        android:id="@+id/forward2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red_buttons_bg"
+                        android:text="\u23ED"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="15dp"
+                    android:background="@color/grey_subsection_bg"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/rectangularInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:hint="hh:mm:ss"
+                        android:inputType="time"
+                        android:maxLines="1"
+                        android:padding="10dp" />
+
+                    <Button
+                        android:id="@+id/pause"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red_buttons_bg"
+                        android:fontFamily="sans-serif-medium"
+                        android:text=" &#9612;&#9612;"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                    <Button
+                        android:id="@+id/backward"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red_buttons_bg"
+                        android:text="\u23EE"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/timeChangeInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="2"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:hint="mm:ss"
+                        android:inputType="time"
+                        android:maxLines="1"
+                        android:padding="10dp" />
+
+                    <Button
+                        android:id="@+id/forward"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red_buttons_bg"
+                        android:text="\u23ED"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="15dp"
+                    android:background="@color/grey_section_bg"
+                    android:orientation="horizontal">
+
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+
+                    <Button
+                        android:id="@+id/addTimerButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="0dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/red_buttons_bg"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="+"
+                        android:textColor="@android:color/white"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
