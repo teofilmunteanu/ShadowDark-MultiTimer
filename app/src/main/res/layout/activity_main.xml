@@ -103,191 +103,24 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <ScrollView
+            android:id="@+id/torchesScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarStyle="insideOverlay"
             tools:visibility="visible">
 
             <LinearLayout
+                android:id="@+id/scrollViewItemsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="15dp"
-                    android:background="@color/grey_subsection_bg"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/rectangularInput2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="3"
-                        android:background="@color/white"
-                        android:gravity="center"
-                        android:hint="hh:mm:ss"
-                        android:inputType="time"
-                        android:maxLines="1"
-                        android:padding="10dp" />
-
-                    <Button
-                        android:id="@+id/pause2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red_buttons_bg"
-                        android:fontFamily="sans-serif-medium"
-                        android:text=" &#9612;&#9612;"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="normal" />
-
-                    <Button
-                        android:id="@+id/backward2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red_buttons_bg"
-                        android:text="\u23EE"
-                        android:textColor="@android:color/white"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/timeChangeInput2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="2"
-                        android:background="@color/white"
-                        android:gravity="center"
-                        android:hint="mm:ss"
-                        android:inputType="time"
-                        android:maxLines="1"
-                        android:padding="10dp" />
-
-                    <Button
-                        android:id="@+id/forward2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red_buttons_bg"
-                        android:text="\u23ED"
-                        android:textColor="@android:color/white"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="15dp"
-                    android:background="@color/grey_subsection_bg"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/rectangularInput"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginVertical="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="3"
-                        android:background="@color/white"
-                        android:gravity="center"
-                        android:hint="hh:mm:ss"
-                        android:inputType="time"
-                        android:maxLines="1"
-                        android:padding="10dp" />
-
-                    <Button
-                        android:id="@+id/pause"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red_buttons_bg"
-                        android:fontFamily="sans-serif-medium"
-                        android:text=" &#9612;&#9612;"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="normal" />
-
-                    <Button
-                        android:id="@+id/backward"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red_buttons_bg"
-                        android:text="\u23EE"
-                        android:textColor="@android:color/white"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/timeChangeInput"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="2"
-                        android:background="@color/white"
-                        android:gravity="center"
-                        android:hint="mm:ss"
-                        android:inputType="time"
-                        android:maxLines="1"
-                        android:padding="10dp" />
-
-                    <Button
-                        android:id="@+id/forward"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="15dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red_buttons_bg"
-                        android:text="\u23ED"
-                        android:textColor="@android:color/white"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                    android:id="@+id/addBtnContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="15dp"
+                    android:layout_marginVertical="16dp"
                     android:background="@color/grey_section_bg"
                     android:orientation="horizontal">
 
@@ -298,13 +131,14 @@
                         android:layout_weight="2" />
 
                     <Button
-                        android:id="@+id/addTimerButton"
+                        android:id="@+id/addTorchButton"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="0dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/red_buttons_bg"
                         android:fontFamily="sans-serif-medium"
+                        android:onClick="onAddTorchClicked"
                         android:text="+"
                         android:textColor="@android:color/white"
                         android:textSize="28sp"
