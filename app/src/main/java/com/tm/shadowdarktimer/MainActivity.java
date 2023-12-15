@@ -1,23 +1,22 @@
 package com.tm.shadowdarktimer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+
+import com.tm.shadowdarktimer.adapters.TorchAdapter;
+import com.tm.shadowdarktimer.models.TorchModel;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-     LinearLayout torchesContainer;
-    //ArrayList<String> torchesList;
+    //LinearLayout torchesContainer;
+    ArrayList<TorchModel> torchList = new ArrayList<>();
     //ArrayAdapter<String> arrayAdapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -27,11 +26,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LinearLayout mainContainer = findViewById(R.id.linearLayout);
-       /* ScrollView torchesScrollView = mainContainer.findViewById(R.id.torchesScrollView);
+        /* ScrollView torchesScrollView = mainContainer.findViewById(R.id.torchesScrollView);
         torchesContainer = torchesScrollView.findViewById(R.id.scrollViewItemsContainer);*/
+
+        RecyclerView recyclerView = mainContainer.findViewById(R.id.torchesRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //testing
+        torchList.add(new TorchModel("59:00:00"));
+        torchList.add(new TorchModel("00:00:00"));
+        //end testing
+
+        TorchAdapter torchAdapter = new TorchAdapter(torchList);
+        recyclerView.setAdapter(torchAdapter);
+
     }
 
-    public void onAddTorchClicked(View view) {
+    /*public void onAddTorchClicked(View view) {
         LayoutInflater inflater = LayoutInflater.from(this);
         LinearLayout torchLayout = (LinearLayout) inflater.inflate(R.layout.layout_torch, torchesContainer, false);
         torchLayout.setId(torchesContainer.getChildCount());
@@ -52,5 +63,5 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-    }
+    }*/
 }

@@ -1,9 +1,9 @@
-package com.tm.shadowdarktimer.data;
+package com.tm.shadowdarktimer.models;
 
-public class TorchData {
+public class TorchModel {
     private String timeString;
 
-    public TorchData(String timeString){
+    public TorchModel(String timeString){
         this.timeString = timeString;
     }
 

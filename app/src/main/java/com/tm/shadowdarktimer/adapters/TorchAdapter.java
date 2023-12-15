@@ -10,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tm.shadowdarktimer.R;
-import com.tm.shadowdarktimer.data.TorchData;
+import com.tm.shadowdarktimer.models.TorchModel;
 
 import java.util.ArrayList;
 
 public class TorchAdapter extends RecyclerView.Adapter<TorchAdapter.ViewHolder> {
-    private ArrayList<TorchData> torchList;
+    private ArrayList<TorchModel> torchList;
 
-    public TorchAdapter(ArrayList<TorchData> torchList) {
+    public TorchAdapter(ArrayList<TorchModel> torchList) {
         this.torchList = torchList;
     }
 
@@ -33,7 +33,7 @@ public class TorchAdapter extends RecyclerView.Adapter<TorchAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull TorchAdapter.ViewHolder viewHolder, int position) {
         // set item views based on the list item at the given position
-        TorchData torch  = torchList.get(position);
+        TorchModel torch  = torchList.get(position);
 
         viewHolder.totalTimeInput.setText((CharSequence)torch.getTimeString());
     }
