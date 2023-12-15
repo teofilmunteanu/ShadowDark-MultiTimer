@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LinearLayout mainContainer = findViewById(R.id.linearLayout);
-        ScrollView torchesScrollView = mainContainer.findViewById(R.id.torchesScrollView);
-        torchesContainer = torchesScrollView.findViewById(R.id.scrollViewItemsContainer);
+       /* ScrollView torchesScrollView = mainContainer.findViewById(R.id.torchesScrollView);
+        torchesContainer = torchesScrollView.findViewById(R.id.scrollViewItemsContainer);*/
     }
 
     public void onAddTorchClicked(View view) {
