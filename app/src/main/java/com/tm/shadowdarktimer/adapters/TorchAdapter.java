@@ -1,5 +1,6 @@
 package com.tm.shadowdarktimer.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,16 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(holder.getItemViewType() == TORCH_TYPE){
             TorchModel torch  = torchList.get(position);
             TorchViewHolder torchHolder = (TorchViewHolder)holder;
-            torchHolder.totalTimeInput.setText(torch.getTimeString());
+            torchHolder.totalTimeInput.setText(torch.getTime());
+            torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.pause_label : R.string.play_label);
+
+            torchHolder.play_pauseButton.setOnClickListener(view -> {
+                torch.pauseUnpause();
+                torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.pause_label : R.string.play_label);
+
+                //notifyDataSetChanged();
+                notifyItemChanged(torchHolder.getAbsoluteAdapterPosition());
+            });
         }
     }
 

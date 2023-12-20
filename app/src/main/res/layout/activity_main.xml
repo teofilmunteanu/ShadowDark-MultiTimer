@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/red_buttons_bg"
             android:fontFamily="sans-serif-medium"
-            android:text=" &#9612;&#9612;"
+            android:text=" ▌▌"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="normal" />
