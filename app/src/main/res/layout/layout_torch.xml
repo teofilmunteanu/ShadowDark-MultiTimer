@@ -33,9 +33,9 @@
         android:layout_weight="1"
         android:backgroundTint="@color/red_buttons_bg"
         android:fontFamily="sans-serif-medium"
-        android:text=" &#9612;&#9612;"
+        android:text=""
         android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:textSize="22sp"
         android:textStyle="normal" />
 
     <Button
@@ -47,7 +47,7 @@
         android:layout_marginEnd="5dp"
         android:layout_weight="1"
         android:backgroundTint="@color/red_buttons_bg"
-        android:text="\u23EE"
+        android:text="@string/backward_label"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -77,7 +77,7 @@
         android:layout_marginEnd="5dp"
         android:layout_weight="1"
         android:backgroundTint="@color/red_buttons_bg"
-        android:text="\u23ED"
+        android:text="@string/forward_label"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
