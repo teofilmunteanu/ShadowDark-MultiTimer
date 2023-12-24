@@ -1,20 +1,19 @@
 package com.tm.shadowdarktimer.models;
 
+import java.sql.Time;
+import java.time.LocalTime;
+
 public class TorchModel {
-    private String timeString;
+    LocalTime torchTime;
     private boolean paused;
 
-   /* public final String pauseSymbol = " ";
-    public final String playSymbol = ;*/
-
-
-    public TorchModel(String timeString){
-        this.timeString = timeString;
+    public TorchModel(int hours, int minutes, int seconds){
+        this.torchTime = LocalTime.of(hours,minutes,seconds);
         this.paused = true;
     }
 
-    public String getTime(){
-        return timeString;
+    public LocalTime getTime(){
+        return torchTime;
     }
 
     public boolean isPaused(){

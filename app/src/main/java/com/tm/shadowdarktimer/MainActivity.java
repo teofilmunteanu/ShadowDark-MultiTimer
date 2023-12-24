@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAddTorchClicked(View view){
-        torchList.add(new TorchModel("00:00:00"));
+        torchList.add(new TorchModel(1,0,0));
         torchAdapter.notifyItemInserted(torchList.size());
     }
 }
