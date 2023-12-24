@@ -1,5 +1,9 @@
 package com.tm.shadowdarktimer.adapters;
 
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tm.shadowdarktimer.R;
 import com.tm.shadowdarktimer.models.TorchModel;
+import com.tm.shadowdarktimer.services.TorchService;
 
 import java.util.ArrayList;
 
@@ -44,7 +49,71 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         switch (viewType){
             case TORCH_TYPE:
                 View torchView = inflater.inflate(R.layout.layout_torch, parent, false);
-                return new TorchViewHolder(torchView);
+
+                TorchViewHolder torchHolder = new TorchViewHolder(torchView);
+
+                //click event listener for play/pause button
+                torchHolder.play_pauseButton.setOnClickListener(view -> {
+                    int position = torchHolder.getBindingAdapterPosition();
+                    TorchModel torch  = torchList.get(position);
+                    torch.pauseUnpause();
+                    torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
+                });
+
+
+                //doesn't allow colon after the first two
+                InputFilter extraColonFilter = (charSequence, start, end, dest, dstart, dend) -> {
+                    if (charSequence.equals(":") && dstart > 5) {
+                        return "";
+                    }
+
+                    return null;
+                };
+
+                InputFilter digitFilter = (charSequence, start, end, dest, dstart, dend) -> {
+                    //if character is changed/added, not removed
+                    if(start < end){
+                        char c = charSequence.charAt(start);
+                        if(Character.isDigit(c) || c == ':') {
+                            //if you add a character after the 3rd or 6th (which are colons), meaning it's the 10s digit of a minute or second
+                            //don't allow the digit to be bigger than 5
+                            if (dstart == 3 || dstart == 6) {
+                                if (Character.getNumericValue(c) > 5) {
+                                    return "";
+                                }
+                            }
+                        }
+                        else{
+                            return "";
+                        }
+                    }
+
+                    return null;
+                };
+                InputFilter lengthFilter = new InputFilter.LengthFilter(8);
+
+                // Set the InputFilter to the EditText
+                torchHolder.totalTimeInput.setFilters(new InputFilter[]{extraColonFilter,digitFilter,lengthFilter});
+
+                //make it so, when user inputs :, and the hours or mins are single digit, to include a 0 at the beginning
+                torchHolder.totalTimeInput.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable text) {
+                        TorchService.formatTorchTime(text);
+                    }
+                });
+
+                return torchHolder;
 
             case ADD_BUTTON_TYPE:
                 View add_buttonView = inflater.inflate(R.layout.layout_add_button, parent, false);
@@ -63,16 +132,8 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(holder.getItemViewType() == TORCH_TYPE){
             TorchModel torch  = torchList.get(position);
             TorchViewHolder torchHolder = (TorchViewHolder)holder;
-            torchHolder.totalTimeInput.setText(torch.getTime());
-            torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.pause_label : R.string.play_label);
-
-            torchHolder.play_pauseButton.setOnClickListener(view -> {
-                torch.pauseUnpause();
-                torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.pause_label : R.string.play_label);
-
-                //notifyDataSetChanged();
-                notifyItemChanged(torchHolder.getAbsoluteAdapterPosition());
-            });
+            torchHolder.totalTimeInput.setText(TorchService.timeToString(torch.getTime()));
+            torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
         }
     }
 
