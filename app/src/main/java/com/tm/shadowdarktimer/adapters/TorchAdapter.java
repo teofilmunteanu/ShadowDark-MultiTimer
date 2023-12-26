@@ -2,10 +2,12 @@ package com.tm.shadowdarktimer.adapters;
 
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Selection;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -41,6 +43,16 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return torchList.size() + 1;
     }
 
+    public static String stringInsert(String originalString, String insertedString, int index)
+    {
+        StringBuilder newString
+                = new StringBuilder(originalString);
+
+        newString.insert(index, insertedString);
+
+        return newString.toString();
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -60,7 +72,6 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
                 });
 
-
                 //doesn't allow colon after the first two
                 InputFilter extraColonFilter = (charSequence, start, end, dest, dstart, dend) -> {
                     if (charSequence.equals(":") && dstart > 5) {
@@ -69,7 +80,6 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                     return null;
                 };
-
                 InputFilter digitFilter = (charSequence, start, end, dest, dstart, dend) -> {
                     //if character is changed/added, not removed
                     if(start < end){
@@ -109,8 +119,40 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                     @Override
                     public void afterTextChanged(Editable text) {
-                        TorchService.formatTorchTime(text);
+                        String s = text.toString();
+                        //TorchService.formatTorchTime(text);
+
+                        /*int cursorPos = torchHolder.totalTimeInput.getSelectionStart();
+
+                        if (cursorPos>5){
+                            if (s.charAt(5) != ':'){
+                                text.insert(3,"0");
+                            }
+                        }*/
+                        //Log.d("dsad", "cursor pos " + cursorPos);
                     }
+                });
+
+                torchHolder.totalTimeInput.setOnTouchListener((view, event) -> {
+                    if (event.getAction() == MotionEvent.ACTION_UP){
+                        EditText input = (EditText) view;
+
+                        if(input.getText().length() > 1){
+                            int oldCursorPos = torchHolder.totalTimeInput.getSelectionStart();
+
+                            if (oldCursorPos < 3){
+                                while(!Character.isDigit(input.getText().charAt(0)) || !Character.isDigit(input.getText().charAt(1))){
+                                    input.setText(stringInsert(input.getText()+"", "0",0));
+                                }
+                            }
+                            else if(oldCursorPos < 6){
+                                while(!Character.isDigit(input.getText().charAt(3))||!Character.isDigit(input.getText().charAt(4))){
+                                    input.setText(stringInsert(input.getText()+"", "0",3));
+                                }
+                            }
+                        }
+                    }
+                    return false;
                 });
 
                 return torchHolder;
