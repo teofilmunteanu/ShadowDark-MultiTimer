@@ -1,5 +1,6 @@
 package com.tm.shadowdarktimer.adapters;
 
+import android.annotation.SuppressLint;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Selection;
@@ -43,16 +44,7 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return torchList.size() + 1;
     }
 
-    public static String stringInsert(String originalString, String insertedString, int index)
-    {
-        StringBuilder newString
-                = new StringBuilder(originalString);
-
-        newString.insert(index, insertedString);
-
-        return newString.toString();
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -108,28 +100,14 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 //make it so, when user inputs :, and the hours or mins are single digit, to include a 0 at the beginning
                 torchHolder.totalTimeInput.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
                     @Override
                     public void afterTextChanged(Editable text) {
-                        String s = text.toString();
-                        //TorchService.formatTorchTime(text);
-
-                        /*int cursorPos = torchHolder.totalTimeInput.getSelectionStart();
-
-                        if (cursorPos>5){
-                            if (s.charAt(5) != ':'){
-                                text.insert(3,"0");
-                            }
-                        }*/
-                        //Log.d("dsad", "cursor pos " + cursorPos);
+                        TorchService.formatTorchTime(text);
                     }
                 });
 
@@ -140,16 +118,23 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if(input.getText().length() > 1){
                             int oldCursorPos = torchHolder.totalTimeInput.getSelectionStart();
 
+                            /*
+                            //insertTimeLeadingZeros return the text in this case
                             if (oldCursorPos < 3){
-                                while(!Character.isDigit(input.getText().charAt(0)) || !Character.isDigit(input.getText().charAt(1))){
-                                    input.setText(stringInsert(input.getText()+"", "0",0));
-                                }
+                                input.setText(TorchService.insertTimeLeadingZeros(input.getText(), 0));
                             }
                             else if(oldCursorPos < 6){
-                                while(!Character.isDigit(input.getText().charAt(3))||!Character.isDigit(input.getText().charAt(4))){
-                                    input.setText(stringInsert(input.getText()+"", "0",3));
-                                }
+                                input.setText(TorchService.insertTimeLeadingZeros(input.getText(), 3));
+                            }*/
+
+                            Editable inputText = input.getText();
+                            if (oldCursorPos < 3){
+                                TorchService.insertTimeLeadingZeros(inputText,0);
                             }
+                            else if(oldCursorPos < 6){
+                                TorchService.insertTimeLeadingZeros(inputText,3);
+                            }
+                            input.setText(inputText);
                         }
                     }
                     return false;
