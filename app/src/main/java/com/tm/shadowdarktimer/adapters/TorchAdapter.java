@@ -1,6 +1,7 @@
 package com.tm.shadowdarktimer.adapters;
 
 import android.annotation.SuppressLint;
+import android.os.health.TimerStat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Selection;
@@ -56,9 +57,8 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 TorchViewHolder torchHolder = new TorchViewHolder(torchView);
 
-                //click event listener for play/pause button
-
                 //!!!!!!!!!!!!!!! if the length of the timer input is not 8, reset to empty
+                //click event listener for play/pause button
                 torchHolder.play_pauseButton.setOnClickListener(view -> {
                     int position = torchHolder.getBindingAdapterPosition();
                     TorchModel torch  = torchList.get(position);
@@ -73,7 +73,7 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 //filter out colons after the first two
                 InputFilter extraColonFilter = (charSequence, start, end, dest, dstart, dend) -> {
                     long nrOfColons = dest.chars().filter(ch -> ch == ':').count();
-                    if (charSequence.equals(":") && nrOfColons == 2){
+                    if (charSequence.equals(":") && nrOfColons == TorchService.MAX_TIMER_COLONS){
                         return "";
                     }
 
@@ -134,14 +134,14 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             int oldCursorPos = torchHolder.totalTimeInput.getSelectionStart();
 
                             Editable inputText = input.getText();
-                            if (oldCursorPos < 3){
+                            if (oldCursorPos <= TorchService.TIMER_COLON1_POS){
                                 TorchService.insertTimeLeadingZeros(inputText,0);
                             }
-                            else if(oldCursorPos < 6){
-                                TorchService.insertTimeLeadingZeros(inputText,3);
+                            else if(oldCursorPos <= TorchService.TIMER_COLON2_POS){
+                                TorchService.insertTimeLeadingZeros(inputText,TorchService.TIMER_COLON1_POS+1);
                             }
                             else{
-                                TorchService.insertTimeLeadingZeros(inputText, 6);
+                                TorchService.insertTimeLeadingZeros(inputText, TorchService.TIMER_COLON2_POS+1);
                             }
                             input.setText(inputText);
                         }
