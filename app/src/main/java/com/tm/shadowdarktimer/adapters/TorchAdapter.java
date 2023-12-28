@@ -57,6 +57,8 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 TorchViewHolder torchHolder = new TorchViewHolder(torchView);
 
                 //click event listener for play/pause button
+
+                //!!!!!!!!!!!!!!! if the length of the timer input is not 8, reset to empty
                 torchHolder.play_pauseButton.setOnClickListener(view -> {
                     int position = torchHolder.getBindingAdapterPosition();
                     TorchModel torch  = torchList.get(position);
@@ -64,40 +66,51 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
                 });
 
-                //doesn't allow colon after the first two
+                //!!!!!!!!!!!!!!!!!!!!!!! add events in separate method (maybe in service), with the torchInput as a parameter
+                //!!!!!!!!!!!!!!!!!!!!!!! make constant for digit positions and colon positions
+
+
+                //filter out colons after the first two
                 InputFilter extraColonFilter = (charSequence, start, end, dest, dstart, dend) -> {
-                    if (charSequence.equals(":") && dstart > 5) {
+                    long nrOfColons = dest.chars().filter(ch -> ch == ':').count();
+                    if (charSequence.equals(":") && nrOfColons == 2){
                         return "";
                     }
 
                     return null;
                 };
+
+                //filter out invalid characters
                 InputFilter digitFilter = (charSequence, start, end, dest, dstart, dend) -> {
                     //if character is changed/added, not removed
                     if(start < end){
                         char c = charSequence.charAt(start);
-                        if(Character.isDigit(c) || c == ':') {
-                            //if you add a character after the 3rd or 6th (which are colons), meaning it's the 10s digit of a minute or second
-                            //don't allow the digit to be bigger than 5
-                            if (dstart == 3 || dstart == 6) {
-                                if (Character.getNumericValue(c) > 5) {
-                                    return "";
-                                }
-                            }
-                        }
-                        else{
+
+                        //filter out letters and symbols other than colons
+                        if(!Character.isDigit(c) && c != ':') {
                             return "";
+                        }
+
+                        //if you add a character after the 3rd or 6th (which are colons), meaning it's the 10s digit of a minute or second
+                        //don't allow the digit to be bigger than 5
+
+                        //!!!!!! if the colon is added automatically, it doesn't work
+                        Log.d("dasd",dest+" "+dstart);
+                        if (dstart == 3 || dstart == 6) {
+                            if (Character.getNumericValue(c) > 5) {
+                                return "";
+                            }
                         }
                     }
 
                     return null;
                 };
+
                 InputFilter lengthFilter = new InputFilter.LengthFilter(8);
 
-                // Set the InputFilter to the EditText
+                // Set the filters on the EditText
                 torchHolder.totalTimeInput.setFilters(new InputFilter[]{extraColonFilter,digitFilter,lengthFilter});
 
-                //make it so, when user inputs :, and the hours or mins are single digit, to include a 0 at the beginning
                 torchHolder.totalTimeInput.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -105,9 +118,11 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
+                    //when the user inputs :, and the hours or mins are single digit, leading 0s are added
                     @Override
                     public void afterTextChanged(Editable text) {
-                        TorchService.formatTorchTime(text);
+                        TorchService.colonFormatTorchTime(text);
+                        TorchService.colonSkipInput(text);
                     }
                 });
 
@@ -118,21 +133,15 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if(input.getText().length() > 1){
                             int oldCursorPos = torchHolder.totalTimeInput.getSelectionStart();
 
-                            /*
-                            //insertTimeLeadingZeros return the text in this case
-                            if (oldCursorPos < 3){
-                                input.setText(TorchService.insertTimeLeadingZeros(input.getText(), 0));
-                            }
-                            else if(oldCursorPos < 6){
-                                input.setText(TorchService.insertTimeLeadingZeros(input.getText(), 3));
-                            }*/
-
                             Editable inputText = input.getText();
                             if (oldCursorPos < 3){
                                 TorchService.insertTimeLeadingZeros(inputText,0);
                             }
                             else if(oldCursorPos < 6){
                                 TorchService.insertTimeLeadingZeros(inputText,3);
+                            }
+                            else{
+                                TorchService.insertTimeLeadingZeros(inputText, 6);
                             }
                             input.setText(inputText);
                         }
