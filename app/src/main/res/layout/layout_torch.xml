@@ -7,7 +7,7 @@
     android:background="@color/grey_subsection_bg"
     android:orientation="horizontal">
 
-    <EditText
+    <com.tm.shadowdarktimer.decorated_widgets.AutoformattingTorchTime
         android:id="@+id/totalTime"
         android:layout_width="0dp"
         android:layout_height="match_parent"
