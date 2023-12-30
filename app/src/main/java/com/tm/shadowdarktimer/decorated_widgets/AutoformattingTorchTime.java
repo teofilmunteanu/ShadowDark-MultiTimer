@@ -19,6 +19,8 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
     public static final int TIMER_COLON2_POS = 5;
     public static final int TIME_ELEMENT_LENGTH = 2;
 
+    public static boolean programaticallyAddedZero = false;
+
     public AutoformattingTorchTime(Context context, AttributeSet attrs){
         super(context, attrs);
         addTorchTimeFilters();
@@ -51,7 +53,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                 //don't allow the digit to be bigger than 5
 
                 //!!!!!! if the colon is added automatically, it doesn't work
-                Log.d("digit-filter start finish",dest+" "+dstart);
+                //Log.d("digit-filter start finish",dest+" "+dstart);
                 if (dstart == 3 || dstart == 6) {
                     if (Character.getNumericValue(c) > 5) {
                         return "";
@@ -80,8 +82,11 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             //when the user inputs :, and the hours or mins are single digit, leading 0s are added
             @Override
             public void afterTextChanged(Editable text) {
-                colonFormatTorchTime(text);
-                colonSkipInput(text);
+                if (!programaticallyAddedZero){
+                    colonFormatTorchTime(text);
+                    Log.d("changeListener","");
+                    colonSkipInput(text);
+                }
             }
         });
 
@@ -123,6 +128,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                 int nextColonPos = inputText.toString().indexOf(':',firstDigitIndex);
 
                 if (nextColonPos != -1){
+                    Log.d("colonPos",""+nextColonPos);
                     while(inputText.subSequence(firstDigitIndex,nextColonPos).length() < TIME_ELEMENT_LENGTH){
                         inputText.insert(firstDigitIndex, "0");
                         nextColonPos++;
@@ -153,17 +159,23 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         }
     }
 
-
+    // !!!!!!!!!!!!!! gets called when the change is made programatically (ex: when inputting : as the first character, it gets to 00:00:)
     // inserts leading 0s when inputting colons, for faster inputs
     public static void colonSkipInput(Editable inputText){
         int lastColonPos = inputText.toString().lastIndexOf(':');
         if (lastColonPos != -1){
+            programaticallyAddedZero = true;
+
             if (lastColonPos < TIMER_COLON1_POS && inputText.length() <= TIMER_COLON1_POS){
+                Log.d("insert0","inserted 0 on pos 0");
                 insertTimeLeadingZeros(inputText, 0);
             }
             else if (lastColonPos < TIMER_COLON2_POS && inputText.length() <= TIMER_COLON2_POS){
+                Log.d("insert0","inserted 0 on pos 3");
                 insertTimeLeadingZeros(inputText, TIMER_COLON1_POS+1);
             }
+
+            programaticallyAddedZero = false;
         }
     }
 }
