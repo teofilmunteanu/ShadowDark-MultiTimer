@@ -1,6 +1,7 @@
 package com.tm.shadowdarktimer.adapters;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.tm.shadowdarktimer.R;
 import com.tm.shadowdarktimer.models.TorchModel;
 import com.tm.shadowdarktimer.decorated_widgets.AutoformattingTorchTime;
 
+import java.time.DateTimeException;
 import java.util.ArrayList;
 
 public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -56,6 +58,16 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     TorchModel torch  = torchList.get(position);
                     torch.pauseUnpause();
                     torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
+
+                    if(torchHolder.totalTimeInput.isValidTimeString()){
+                        //!!!!!!!!!!!! START TIMER
+                    }
+                    else{
+                        torch.resetTime();
+                        //!!!!!!!! shouldn't it be set automatically it's binded?
+                        torchHolder.totalTimeInput.setText(torch.getTimeString());
+                    }
+
                 });
 
                 return torchHolder;
@@ -77,14 +89,15 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(holder.getItemViewType() == TORCH_TYPE){
             TorchModel torch  = torchList.get(position);
             TorchViewHolder torchHolder = (TorchViewHolder)holder;
-            torchHolder.totalTimeInput.setText(AutoformattingTorchTime.timeToString(torch.getTime()));
+            Log.d("time:",torch.getTimeString());
+            torchHolder.totalTimeInput.setText(torch.getTimeString());
             torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
         }
     }
 
 
     public static class TorchViewHolder extends RecyclerView.ViewHolder{
-        public EditText totalTimeInput;
+        public AutoformattingTorchTime totalTimeInput;
         public Button play_pauseButton;
         public Button backwardTimeButton;
         public EditText timeChangeInput;

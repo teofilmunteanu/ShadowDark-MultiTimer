@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompatEditText {
     public static final int MAX_TIMER_COLONS = 2;
@@ -82,9 +83,8 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             @Override
             public void afterTextChanged(Editable text) {
                 if (!programaticallyAddedZero){
-                    colonFormatTorchTime(text);
-                    Log.d("changeListener","");
-                    colonSkipInput(text);
+                    colonFormatTorchTime();
+                    colonSkipInput();
                 }
             }
         });
@@ -98,13 +98,13 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
 
                     Editable inputText = input.getText();
                     if (oldCursorPos <= TIMER_COLON1_POS){
-                        insertTimeLeadingZeros(inputText,0);
+                        insertTimeLeadingZeros(0);
                     }
                     else if(oldCursorPos <= TIMER_COLON2_POS){
-                        insertTimeLeadingZeros(inputText, TIMER_COLON1_POS + 1);
+                        insertTimeLeadingZeros(TIMER_COLON1_POS + 1);
                     }
                     else{
-                        insertTimeLeadingZeros(inputText, TIMER_COLON2_POS + 1);
+                        insertTimeLeadingZeros(TIMER_COLON2_POS + 1);
                     }
                     input.setText(inputText);
                 }
@@ -113,67 +113,83 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         });
     }
 
-    public static String timeToString(LocalTime time){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        return time.format(formatter);
-    }
-
     //inserts leading 0s until each time element has length 2
-    public static void insertTimeLeadingZeros(Editable inputText, int firstDigitIndex){
-        if(firstDigitIndex >= 0){
-            // for "HH" and "mm" elements
-            if (firstDigitIndex < TIMER_COLON2_POS){
-                int nextColonPos = inputText.toString().indexOf(':',firstDigitIndex);
+    public void insertTimeLeadingZeros(int firstDigitIndex){
+        Editable inputText = this.getText();
 
-                if (nextColonPos != -1){
-                    Log.d("colonPos",""+nextColonPos);
-                    while(inputText.subSequence(firstDigitIndex,nextColonPos).length() < TIME_ELEMENT_LENGTH){
+        if (inputText!=null){
+            if(firstDigitIndex >= 0){
+                // for "HH" and "mm" elements
+                if (firstDigitIndex < TIMER_COLON2_POS){
+                    int nextColonPos = inputText.toString().indexOf(':',firstDigitIndex);
+
+                    if (nextColonPos != -1){
+                        while(inputText.subSequence(firstDigitIndex,nextColonPos).length() < TIME_ELEMENT_LENGTH){
+                            inputText.insert(firstDigitIndex, "0");
+                            nextColonPos++;
+                        }
+                    }
+                }
+                // for the "ss" time element
+                else{
+                    while(inputText.subSequence(firstDigitIndex,inputText.length()).length() < TIME_ELEMENT_LENGTH){
                         inputText.insert(firstDigitIndex, "0");
-                        nextColonPos++;
                     }
                 }
             }
-            // for the "ss" time element
-            else{
-                while(inputText.subSequence(firstDigitIndex,inputText.length()).length() < TIME_ELEMENT_LENGTH){
-                    inputText.insert(firstDigitIndex, "0");
-                }
-            }
         }
     }
 
+    //!!!!!!!! when going from 00:00, to 0:00, it becomes 0::00, when clicking once 00::00, then 00::0000
     // inserts colons automatically when inputting time digits
-    public static void colonFormatTorchTime(Editable inputText){
-        if (inputText.length() >= TIMER_COLON1_POS + 1){
-            if (inputText.charAt(TIMER_COLON1_POS)!=':'){
-                inputText.insert(TIMER_COLON1_POS,":");
-            }
-        }
+    public void colonFormatTorchTime(){
+        Editable inputText = this.getText();
 
-        if (inputText.length() >= TIMER_COLON2_POS + 1){
-            if (inputText.charAt(TIMER_COLON2_POS)!=':'){
-                inputText.insert(TIMER_COLON2_POS,":");
+        if (inputText !=null){
+            // can't check if the length is just equal, since the colon would be deletable when there are digits after it
+            if (inputText.length() >= TIMER_COLON1_POS + 1){
+                if (inputText.charAt(TIMER_COLON1_POS)!=':'){
+                    inputText.insert(TIMER_COLON1_POS,":");
+                }
+            }
+
+            if (inputText.length() >= TIMER_COLON2_POS + 1){
+                if (inputText.charAt(TIMER_COLON2_POS)!=':'){
+                    inputText.insert(TIMER_COLON2_POS,":");
+                }
             }
         }
     }
 
     // inserts leading 0s when inputting colons, for faster inputs
-    public static void colonSkipInput(Editable inputText){
-        int lastColonPos = inputText.toString().lastIndexOf(':');
-        if (lastColonPos != -1){
-            programaticallyAddedZero = true;
+    public void colonSkipInput(){
+        Editable inputText = this.getText();
 
-            if (lastColonPos < TIMER_COLON1_POS && inputText.length() <= TIMER_COLON1_POS){
-                Log.d("insert0","inserted 0 on pos 0");
-                insertTimeLeadingZeros(inputText, 0);
-            }
-            else if (lastColonPos < TIMER_COLON2_POS && inputText.length() <= TIMER_COLON2_POS){
-                Log.d("insert0","inserted 0 on pos 3");
-                insertTimeLeadingZeros(inputText, TIMER_COLON1_POS+1);
-            }
+        if (inputText!=null){
+            int lastColonPos = inputText.toString().lastIndexOf(':');
+            if (lastColonPos != -1){
+                programaticallyAddedZero = true;
 
-            programaticallyAddedZero = false;
+                if (lastColonPos < TIMER_COLON1_POS && inputText.length() <= TIMER_COLON1_POS){
+                    insertTimeLeadingZeros(0);
+                }
+                else if (lastColonPos < TIMER_COLON2_POS && inputText.length() <= TIMER_COLON2_POS){
+                    insertTimeLeadingZeros(TIMER_COLON1_POS+1);
+                }
+
+                programaticallyAddedZero = false;
+            }
+        }
+    }
+
+    public boolean isValidTimeString(){
+        try {
+            String timeString = this.getText()+"";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalTime.parse(timeString, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
         }
     }
 }

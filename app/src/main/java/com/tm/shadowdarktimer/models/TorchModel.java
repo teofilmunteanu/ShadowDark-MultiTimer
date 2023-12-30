@@ -2,6 +2,8 @@ package com.tm.shadowdarktimer.models;
 
 import java.sql.Time;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class TorchModel {
     LocalTime torchTime;
@@ -14,6 +16,16 @@ public class TorchModel {
 
     public LocalTime getTime(){
         return torchTime;
+    }
+
+    public void resetTime(){
+        torchTime = LocalTime.of(0,0,0);
+    }
+
+    public String getTimeString(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        return torchTime.format(formatter);
     }
 
     public boolean isPaused(){
