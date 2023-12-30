@@ -49,14 +49,13 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                     return "";
                 }
 
-                //if you add a character after the 3rd or 6th (which are colons), meaning it's the 10s digit of a minute or second
-                //don't allow the digit to be bigger than 5
-
-                //!!!!!! if the colon is added automatically, it doesn't work
-                //Log.d("digit-filter start finish",dest+" "+dstart);
-                if (dstart == 3 || dstart == 6) {
-                    if (Character.getNumericValue(c) > 5) {
-                        return "";
+                //if you add a character after a colon, or after the second digit of a time element,(it's the 10s digit of min/sec),
+                // doesn't allow the digit to be bigger than 5
+                if (dest.length()>=dstart && dstart>=2){
+                    if (dest.charAt(dstart-1)==':' || Character.isDigit(dest.charAt(dstart-2))) {
+                        if (Character.getNumericValue(c) > 5) {
+                            return "";
+                        }
                     }
                 }
             }
@@ -159,7 +158,6 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         }
     }
 
-    // !!!!!!!!!!!!!! gets called when the change is made programatically (ex: when inputting : as the first character, it gets to 00:00:)
     // inserts leading 0s when inputting colons, for faster inputs
     public static void colonSkipInput(Editable inputText){
         int lastColonPos = inputText.toString().lastIndexOf(':');
