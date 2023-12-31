@@ -39,32 +39,48 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             return null;
         };
 
-        InputFilter colonSkipInput = (charSequence, start, end, dest, dstart, dend) -> {
+
+        //!!!!!!!!!!!!!! crashes when inputting : like: 0:00 -> 0::00 AND doesn't format correctly (00:4 should become 00:04 -> use insert)
+        //!!!!!!!!!!!!!! JUST DON"T ALLOW COLONS LIKE THAT, COLONS TO SKIP INPUT SHOULD ONLY BE USED AT THE END, NOT IN-BETWEEN
+        /*InputFilter colonSkipInput = (charSequence, start, end, dest, dstart, dend) -> {
             if(start<end){
                 if (charSequence.charAt(start) == ':'){
-                    //colonSkipInput(start);
-                    String formattedInput = ":";
+                    String formattedInput = "";
 
-                    if (dest.length()==TIME_ELEMENT_LENGTH-2){
-                        formattedInput = "00" + formattedInput;
-                    }
-                    else if (dest.length()==TIME_ELEMENT_LENGTH-1 && Character.isDigit(dest.charAt(start))){
-                        formattedInput = "0" + formattedInput;
+                    int startPos;
+                    if (dest.length()<TIME_ELEMENT_LENGTH){
+                        startPos = 0;
                     }
                     else{
-                        int lastColonPos = dest.toString().lastIndexOf(":");
-                        int nextColonPos = dstart;
-                        String s = dest.subSequence(lastColonPos+1,nextColonPos).toString();
-
-                        while(s.length() < TIME_ELEMENT_LENGTH){
-                            s+="0";
-                            formattedInput = "0" + formattedInput;
-                        }
+                        startPos = dest.toString().lastIndexOf(":")+1;
                     }
 
-                    return formattedInput;
+                    int nextColonPos = dstart;
+                    int subseqLen = dest.subSequence(startPos,nextColonPos).length();
+
+                    while(subseqLen < TIME_ELEMENT_LENGTH){
+                        subseqLen++;
+                        formattedInput += "0";
+                    }
+
+
+                    return formattedInput + ":";
                 }
 
+            }
+            return null;
+        };*/
+        InputFilter colonsBeforeColonsFilter = (charSequence, start, end, dest, dstart, dend) -> {
+            if(start<end) {
+                if (charSequence.charAt(start) == ':') {
+                    //if the colon is not added at the end of the input
+                    if (dend < dest.length()){
+                        Log.d("sdasdasd",dest.charAt(dstart+1)+"");
+                        if (dest.charAt(dstart) == ':'){
+                            return "";
+                        }
+                    }
+                }
             }
             return null;
         };
@@ -97,7 +113,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         InputFilter lengthFilter = new InputFilter.LengthFilter(8);
 
         // Set the filters on the EditText
-        this.setFilters(new InputFilter[]{colonSkipInput,extraColonFilter,digitFilter,lengthFilter});
+        this.setFilters(new InputFilter[]{colonsBeforeColonsFilter,extraColonFilter,digitFilter,lengthFilter});
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -114,7 +130,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             public void afterTextChanged(Editable text) {
                 if (!programaticallyAddedZero){
                     colonFormatTorchTime();
-                    //colonSkipInput();
+                    colonSkipInput();
                 }
             }
         });
