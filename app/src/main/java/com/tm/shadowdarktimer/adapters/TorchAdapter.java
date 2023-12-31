@@ -51,7 +51,6 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 TorchViewHolder torchHolder = new TorchViewHolder(torchView);
 
-                //!!!!!!!!!!!!!!! if the length of the timer input is not 8, reset to empty
                 //click event listener for play/pause button
                 torchHolder.play_pauseButton.setOnClickListener(view -> {
                     int position = torchHolder.getBindingAdapterPosition();

@@ -39,6 +39,36 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             return null;
         };
 
+        InputFilter colonSkipInput = (charSequence, start, end, dest, dstart, dend) -> {
+            if(start<end){
+                if (charSequence.charAt(start) == ':'){
+                    //colonSkipInput(start);
+                    String formattedInput = ":";
+
+                    if (dest.length()==TIME_ELEMENT_LENGTH-2){
+                        formattedInput = "00" + formattedInput;
+                    }
+                    else if (dest.length()==TIME_ELEMENT_LENGTH-1 && Character.isDigit(dest.charAt(start))){
+                        formattedInput = "0" + formattedInput;
+                    }
+                    else{
+                        int lastColonPos = dest.toString().lastIndexOf(":");
+                        int nextColonPos = dstart;
+                        String s = dest.subSequence(lastColonPos+1,nextColonPos).toString();
+
+                        while(s.length() < TIME_ELEMENT_LENGTH){
+                            s+="0";
+                            formattedInput = "0" + formattedInput;
+                        }
+                    }
+
+                    return formattedInput;
+                }
+
+            }
+            return null;
+        };
+
         //filter out invalid characters
         InputFilter digitFilter = (charSequence, start, end, dest, dstart, dend) -> {
             //if character is changed/added, not removed
@@ -67,7 +97,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         InputFilter lengthFilter = new InputFilter.LengthFilter(8);
 
         // Set the filters on the EditText
-        this.setFilters(new InputFilter[]{extraColonFilter,digitFilter,lengthFilter});
+        this.setFilters(new InputFilter[]{colonSkipInput,extraColonFilter,digitFilter,lengthFilter});
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -84,7 +114,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             public void afterTextChanged(Editable text) {
                 if (!programaticallyAddedZero){
                     colonFormatTorchTime();
-                    colonSkipInput();
+                    //colonSkipInput();
                 }
             }
         });
@@ -132,8 +162,12 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                 }
                 // for the "ss" time element
                 else{
-                    while(inputText.subSequence(firstDigitIndex,inputText.length()).length() < TIME_ELEMENT_LENGTH){
-                        inputText.insert(firstDigitIndex, "0");
+                    int prevColonPos = inputText.toString().lastIndexOf(':');
+
+                    if (prevColonPos != -1){
+                        while(inputText.subSequence(prevColonPos+1,inputText.length()).length() < TIME_ELEMENT_LENGTH){
+                            inputText.insert(firstDigitIndex, "0");
+                        }
                     }
                 }
             }
@@ -148,13 +182,13 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         if (inputText !=null){
             // can't check if the length is just equal, since the colon would be deletable when there are digits after it
             if (inputText.length() >= TIMER_COLON1_POS + 1){
-                if (inputText.charAt(TIMER_COLON1_POS)!=':'){
+                if (inputText.charAt(TIMER_COLON1_POS)!=':' && Character.isDigit(inputText.charAt(0)) && Character.isDigit(inputText.charAt(1))){
                     inputText.insert(TIMER_COLON1_POS,":");
                 }
             }
 
             if (inputText.length() >= TIMER_COLON2_POS + 1){
-                if (inputText.charAt(TIMER_COLON2_POS)!=':'){
+                if (inputText.charAt(TIMER_COLON2_POS)!=':' && Character.isDigit(inputText.charAt(3)) && Character.isDigit(inputText.charAt(4))){
                     inputText.insert(TIMER_COLON2_POS,":");
                 }
             }
