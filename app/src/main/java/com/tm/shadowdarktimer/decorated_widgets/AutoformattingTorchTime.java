@@ -39,43 +39,12 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             return null;
         };
 
-
-        //!!!!!!!!!!!!!! crashes when inputting : like: 0:00 -> 0::00 AND doesn't format correctly (00:4 should become 00:04 -> use insert)
-        //!!!!!!!!!!!!!! JUST DON"T ALLOW COLONS LIKE THAT, COLONS TO SKIP INPUT SHOULD ONLY BE USED AT THE END, NOT IN-BETWEEN
-        /*InputFilter colonSkipInput = (charSequence, start, end, dest, dstart, dend) -> {
-            if(start<end){
-                if (charSequence.charAt(start) == ':'){
-                    String formattedInput = "";
-
-                    int startPos;
-                    if (dest.length()<TIME_ELEMENT_LENGTH){
-                        startPos = 0;
-                    }
-                    else{
-                        startPos = dest.toString().lastIndexOf(":")+1;
-                    }
-
-                    int nextColonPos = dstart;
-                    int subseqLen = dest.subSequence(startPos,nextColonPos).length();
-
-                    while(subseqLen < TIME_ELEMENT_LENGTH){
-                        subseqLen++;
-                        formattedInput += "0";
-                    }
-
-
-                    return formattedInput + ":";
-                }
-
-            }
-            return null;
-        };*/
-        InputFilter colonsBeforeColonsFilter = (charSequence, start, end, dest, dstart, dend) -> {
+        //!!!!!!!!! One solution for the colon skip input problems ---- not that clean
+        /*InputFilter colonsBeforeColonsFilter = (charSequence, start, end, dest, dstart, dend) -> {
             if(start<end) {
                 if (charSequence.charAt(start) == ':') {
                     //if the colon is not added at the end of the input
                     if (dend < dest.length()){
-                        Log.d("sdasdasd",dest.charAt(dstart+1)+"");
                         if (dest.charAt(dstart) == ':'){
                             return "";
                         }
@@ -83,7 +52,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                 }
             }
             return null;
-        };
+        };*/
 
         //filter out invalid characters
         InputFilter digitFilter = (charSequence, start, end, dest, dstart, dend) -> {
@@ -113,17 +82,22 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         InputFilter lengthFilter = new InputFilter.LengthFilter(8);
 
         // Set the filters on the EditText
-        this.setFilters(new InputFilter[]{colonsBeforeColonsFilter,extraColonFilter,digitFilter,lengthFilter});
+        this.setFilters(new InputFilter[]{/*colonsBeforeColonsFilter,*/extraColonFilter,digitFilter,lengthFilter});
     }
 
     @SuppressLint("ClickableViewAccessibility")
     public void addTorchTimeEvents(){
         this.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("beftextch",s+" "+start+" "+after+" "+count);
+
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("ontextch",s+" "+start+" "+before+" "+count);
+            }
 
             //when the user inputs :, and the hours or mins are single digit, leading 0s are added
             @Override
@@ -140,21 +114,10 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                 EditText input = (EditText) view;
 
                 if(input.getText().length() > 1){
-                    int oldCursorPos = this.getSelectionStart();
-
-                    Editable inputText = input.getText();
-                    if (oldCursorPos <= TIMER_COLON1_POS){
-                        insertTimeLeadingZeros(0);
-                    }
-                    else if(oldCursorPos <= TIMER_COLON2_POS){
-                        insertTimeLeadingZeros(TIMER_COLON1_POS + 1);
-                    }
-                    else{
-                        insertTimeLeadingZeros(TIMER_COLON2_POS + 1);
-                    }
-                    input.setText(inputText);
+                    insertTimeLeadingZeros();
                 }
             }
+
             return false;
         });
     }
@@ -176,18 +139,24 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                         }
                     }
                 }
-                // for the "ss" time element
+                // for the "ss" time element, or "mm" is there is no "ss"
                 else{
                     int prevColonPos = inputText.toString().lastIndexOf(':');
 
-                    if (prevColonPos != -1){
+                    if (prevColonPos != -1 && inputText.length() >= prevColonPos+1){
                         while(inputText.subSequence(prevColonPos+1,inputText.length()).length() < TIME_ELEMENT_LENGTH){
-                            inputText.insert(firstDigitIndex, "0");
+                            inputText.insert(prevColonPos+1, "0");
                         }
                     }
                 }
             }
         }
+    }
+
+    public void insertTimeLeadingZeros(){
+        insertTimeLeadingZeros(0);
+        insertTimeLeadingZeros(TIMER_COLON1_POS + 1);
+        insertTimeLeadingZeros(TIMER_COLON2_POS + 1);
     }
 
     //!!!!!!!! when going from 00:00, to 0:00, it becomes 0::00, when clicking once 00::00, then 00::0000
@@ -217,6 +186,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
 
         if (inputText!=null){
             int lastColonPos = inputText.toString().lastIndexOf(':');
+
             if (lastColonPos != -1){
                 programaticallyAddedZero = true;
 

@@ -57,6 +57,7 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     TorchModel torch  = torchList.get(position);
                     torch.pauseUnpause();
                     torchHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
+                    torchHolder.totalTimeInput.insertTimeLeadingZeros();
 
                     if(torchHolder.totalTimeInput.isValidTimeString()){
                         //!!!!!!!!!!!! START TIMER
