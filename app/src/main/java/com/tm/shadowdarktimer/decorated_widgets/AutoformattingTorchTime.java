@@ -122,7 +122,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         });
     }
 
-    //inserts leading 0s until each time element has length 2
+    //inserts leading 0s until the time element has length 2
     public void insertTimeLeadingZeros(int firstDigitIndex){
         Editable inputText = this.getText();
 
@@ -153,13 +153,13 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         }
     }
 
+    //insert leading 0s everywhere
     public void insertTimeLeadingZeros(){
         insertTimeLeadingZeros(0);
         insertTimeLeadingZeros(TIMER_COLON1_POS + 1);
         insertTimeLeadingZeros(TIMER_COLON2_POS + 1);
     }
 
-    //!!!!!!!! when going from 00:00, to 0:00, it becomes 0::00, when clicking once 00::00, then 00::0000
     // inserts colons automatically when inputting time digits
     public void colonFormatTorchTime(){
         Editable inputText = this.getText();

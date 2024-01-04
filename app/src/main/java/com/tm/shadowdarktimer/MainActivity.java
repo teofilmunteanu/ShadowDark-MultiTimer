@@ -5,14 +5,20 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.tm.shadowdarktimer.adapters.TorchAdapter;
 import com.tm.shadowdarktimer.models.TorchModel;
+import com.tm.shadowdarktimer.services.TimerService;
 
 import java.util.ArrayList;
 
@@ -32,11 +38,22 @@ public class MainActivity extends AppCompatActivity {
 
         torchAdapter = new TorchAdapter(torchList);
         recyclerView.setAdapter(torchAdapter);
-
     }
 
     public void onAddTorchClicked(View view){
-        torchList.add(new TorchModel(1,0,0));
-        torchAdapter.notifyItemInserted(torchList.size());
+        torchList.add(new TorchModel(torchList.size(),1,0,0));
+        torchAdapter.notifyItemInserted(torchList.size()-1);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, TimerService.class);
+        startService(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }
