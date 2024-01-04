@@ -8,7 +8,7 @@ import com.tm.shadowdarktimer.models.TorchModel;
 import java.time.LocalTime;
 
 public class TorchTimer extends CountDownTimer {
-    private TorchModel torchModel;
+    private final TorchModel torchModel;
 
     public TorchTimer(TorchModel torchModel, long millisInFuture, long countDownInterval) {
         super(millisInFuture, countDownInterval);
@@ -18,7 +18,7 @@ public class TorchTimer extends CountDownTimer {
     @Override
     public void onTick(long millisUntilFinished) {
         Log.d("time", millisUntilFinished+"");
-        torchModel.updateTorchTime(millisToLocalTime(millisUntilFinished));
+        torchModel.setTorchTime(millisToLocalTime(millisUntilFinished));
     }
 
     @Override

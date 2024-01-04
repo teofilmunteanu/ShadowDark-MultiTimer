@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".services.TimerService"
+            android:name=".services.TimerManager"
             android:enabled="true"
             android:exported="false" />
     </application>

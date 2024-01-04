@@ -1,6 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
+    kotlin("android") version "1.8.10"
 }
 
 android {
@@ -26,6 +27,11 @@ android {
             )
         }
     }
+
+    buildFeatures{
+        dataBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

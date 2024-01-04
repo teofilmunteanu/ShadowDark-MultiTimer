@@ -2,26 +2,22 @@ package com.tm.shadowdarktimer.services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import com.tm.shadowdarktimer.MainActivity;
 import com.tm.shadowdarktimer.models.TorchModel;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Timer;
 
-public class TimerService extends Service {
-    private static TimerService instance;
+public class TimerManager extends Service {
+    private static TimerManager instance;
 
     private ArrayList<TorchTimer> torchTimers = new ArrayList<>();
-    private int totalTimerMiliseconds;
 
-    public static TimerService getInstance() {
+    public static TimerManager getInstance() {
         return instance;
     }
 

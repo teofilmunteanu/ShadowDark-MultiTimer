@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tm.shadowdarktimer.R;
+import com.tm.shadowdarktimer.databinding.LayoutTorchBinding;
 import com.tm.shadowdarktimer.models.TorchModel;
 import com.tm.shadowdarktimer.decorated_widgets.AutoformattingTorchTime;
 import com.tm.shadowdarktimer.services.TimerUpdateListener;
@@ -49,30 +51,23 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         switch (viewType){
             case TORCH_TYPE:
-                View torchView = inflater.inflate(R.layout.layout_torch, parent, false);
+                LayoutTorchBinding torchBinding = DataBindingUtil.inflate(inflater, R.layout.layout_torch, parent, false);
 
-                TorchViewHolder torchViewHolder = new TorchViewHolder(torchView);
-
-
-                //torch.setTorchTimeChangeListener(torchViewHolder);
+                TorchViewHolder torchViewHolder = new TorchViewHolder(torchBinding.getRoot());
 
                 //click event listener for play/pause button
                 torchViewHolder.play_pauseButton.setOnClickListener(view -> {
                     int position = torchViewHolder.getBindingAdapterPosition();
                     TorchModel torch  = torchList.get(position); // !!!!!!!!!!!!!! !can I get the torch before pressing (when creating the view holder)??
-                    torch.setTorchTimeChangeListener(torchViewHolder);//!!!!! not rly clean
 
                     torch.pauseUnpause();
-                    torchViewHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
                     torchViewHolder.totalTimeInput.insertTimeLeadingZeros();
 
-                    if(torchViewHolder.totalTimeInput.isValidTimeString()){
+                    if(TorchModel.isValidTimeString(torchViewHolder.totalTimeInput.getText()+"")){
                         torch.startTimer();//!!!!!!!!!!!! START TIMER
                     }
                     else{
                         torch.resetTime();
-                        //!!!!!!!! shouldn't it be set automatically it's binded?
-                        torchViewHolder.totalTimeInput.setText(torch.getTimeString());
                     }
 
                 });
@@ -96,13 +91,14 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         if(holder.getItemViewType() == TORCH_TYPE){
             TorchModel torch  = torchList.get(position);
             TorchViewHolder torchViewHolder = (TorchViewHolder)holder;
-            Log.d("time:",torch.getTimeString());
-            torchViewHolder.totalTimeInput.setText(torch.getTimeString());
-            torchViewHolder.play_pauseButton.setText(torch.isPaused() ? R.string.play_label : R.string.pause_label);
+
+            torchViewHolder.bind(torch);
         }
     }
 
-    public static class TorchViewHolder extends RecyclerView.ViewHolder implements TimerUpdateListener {
+    public static class TorchViewHolder extends RecyclerView.ViewHolder{
+        private LayoutTorchBinding binding;
+
         public AutoformattingTorchTime totalTimeInput;
         public Button play_pauseButton;
         public Button backwardTimeButton;
@@ -118,11 +114,13 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             backwardTimeButton = itemView.findViewById(R.id.backward);
             timeChangeInput = itemView.findViewById(R.id.timeChange);
             forwardTimeButton = itemView.findViewById(R.id.forward);
+
+            binding = DataBindingUtil.bind(itemView);
         }
 
-        @Override
-        public void onTorchTimeChanged(LocalTime newTime) {
-            totalTimeInput.setText(TorchModel.getTimeString(newTime));
+        public void bind(TorchModel torch){
+            binding.setTorchModel(torch);
+            binding.executePendingBindings();
         }
     }
 

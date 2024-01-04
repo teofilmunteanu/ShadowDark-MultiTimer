@@ -89,15 +89,10 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
     public void addTorchTimeEvents(){
         this.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.d("beftextch",s+" "+start+" "+after+" "+count);
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d("ontextch",s+" "+start+" "+before+" "+count);
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             //when the user inputs :, and the hours or mins are single digit, leading 0s are added
             @Override
@@ -199,17 +194,6 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
 
                 programaticallyAddedZero = false;
             }
-        }
-    }
-
-    public boolean isValidTimeString(){
-        try {
-            String timeString = this.getText()+"";
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            LocalTime.parse(timeString, formatter);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
         }
     }
 }

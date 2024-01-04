@@ -1,85 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginTop="16dp"
-    android:background="@color/grey_subsection_bg"
-    android:orientation="horizontal">
 
-    <com.tm.shadowdarktimer.decorated_widgets.AutoformattingTorchTime
-        android:id="@+id/totalTime"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginVertical="10dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_weight="3"
-        android:background="@color/white"
-        android:gravity="center"
-        android:hint="hh:mm:ss"
-        android:inputType="time"
-        android:maxLines="1"
-        android:padding="10dp" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/play_pause"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginVertical="15dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="15dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/red_buttons_bg"
-        android:fontFamily="sans-serif-medium"
-        android:text=""
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:textStyle="normal" />
+    <data>
+        <!-- Define variables for your data binding -->
+        <variable
+            name="torchModel"
+            type="com.tm.shadowdarktimer.models.TorchModel" />
+    </data>
 
-    <Button
-        android:id="@+id/backward"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginVertical="15dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="5dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/red_buttons_bg"
-        android:text="@string/backward_label"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/grey_subsection_bg"
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/timeChange"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginVertical="15dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="5dp"
-        android:layout_weight="2"
-        android:background="@color/white"
-        android:gravity="center"
-        android:hint="mm:ss"
-        android:inputType="time"
-        android:maxLines="1"
-        android:padding="10dp" />
+        <com.tm.shadowdarktimer.decorated_widgets.AutoformattingTorchTime
+            android:id="@+id/totalTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="3"
+            android:background="@color/white"
+            android:gravity="center"
+            android:hint="@string/time_format"
+            android:inputType="time"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:text="@={torchModel.timeString}"
+            />
 
-    <Button
-        android:id="@+id/forward"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginVertical="15dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="5dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/red_buttons_bg"
-        android:text="@string/forward_label"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/play_pause"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_buttons_bg"
+            android:fontFamily="sans-serif-medium"
+            android:text="@{torchModel.paused ? @string/play_label : @string/pause_label}"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="normal" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/backward"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_buttons_bg"
+            android:text="@string/backward_label"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/timeChange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:gravity="center"
+            android:hint="@string/time_change_format"
+            android:inputType="time"
+            android:maxLines="1"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/forward"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_buttons_bg"
+            android:text="@string/forward_label"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</layout>

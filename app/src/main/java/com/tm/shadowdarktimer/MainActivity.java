@@ -1,30 +1,22 @@
 package com.tm.shadowdarktimer;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.tm.shadowdarktimer.adapters.TorchAdapter;
 import com.tm.shadowdarktimer.models.TorchModel;
-import com.tm.shadowdarktimer.services.TimerService;
+import com.tm.shadowdarktimer.services.TimerManager;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<TorchModel> torchList = new ArrayList<>();
-    private final Handler handler = new Handler(Looper.getMainLooper());
     TorchAdapter torchAdapter;
 
     @Override
@@ -48,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, TimerService.class);
+        Intent intent = new Intent(this, TimerManager.class);
         startService(intent);
     }
 
