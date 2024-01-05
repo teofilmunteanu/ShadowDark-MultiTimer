@@ -60,11 +60,10 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                     int position = torchViewHolder.getBindingAdapterPosition();
                     TorchModel torch  = torchList.get(position); // !!!!!!!!!!!!!! !can I get the torch before pressing (when creating the view holder)??
 
-                    torch.pauseUnpause();
                     torchViewHolder.totalTimeInput.insertTimeLeadingZeros();
 
                     if(TorchModel.isValidTimeString(torchViewHolder.totalTimeInput.getText()+"")){
-                        torch.startTimer();//!!!!!!!!!!!! START TIMER
+                        torch.pauseUnpause();
                     }
                     else{
                         torch.resetTime();

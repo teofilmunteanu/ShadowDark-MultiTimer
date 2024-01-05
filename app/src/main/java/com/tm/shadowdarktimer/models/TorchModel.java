@@ -8,25 +8,19 @@ import androidx.databinding.Bindable;
 import com.tm.shadowdarktimer.BR;
 import com.tm.shadowdarktimer.services.TimerManager;
 import com.tm.shadowdarktimer.services.TimerUpdateListener;
+import com.tm.shadowdarktimer.services.TorchTimer;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class TorchModel extends BaseObservable{
-    private final int id;
     private LocalTime torchTime;
-    private boolean paused;
-    //!!!!! do I need an instance of the timer? 2 options: instance of the timer, or the id, and I search it every time in the service
-    private CountDownTimer timer;
-    private final TimerManager timerManager;
-    private TimerUpdateListener torchTimeChangeListener;
+    private final TorchTimer timer;
 
-    public TorchModel(int id, int hours, int minutes, int seconds){
-        this.id = id;
+    public TorchModel(int hours, int minutes, int seconds){
         this.torchTime = LocalTime.of(hours,minutes,seconds);
-        this.paused = true;
-        timerManager = TimerManager.getInstance();
+        timer = TimerManager.getInstance().createTimer(this, torchTime);
     }
 
     public void resetTime(){
@@ -45,6 +39,7 @@ public class TorchModel extends BaseObservable{
 
         //only update the bound value if it's valid
         if (torchTime != null){
+            timer.updateMillisRemaining(torchTime);
             notifyPropertyChanged(BR.timeString);
         }
     }
@@ -71,26 +66,18 @@ public class TorchModel extends BaseObservable{
 
     @Bindable
     public boolean getPaused(){
-        return paused;
+        return timer.isPaused();
     }
 
-    public void setPaused(boolean paused) {
-        if (this.paused != paused) {
-            this.paused = paused;
-            notifyPropertyChanged(BR.paused);
-        }
-    }
-
+    //TIMER OPERATIONS
     public void pauseUnpause(){
-        setPaused(!paused);
+        if (timer.isPaused()){
+            timer.resumeTimer();
+        }
+        else{
+            timer.pauseTimer();
+        }
+
         notifyPropertyChanged(BR.paused);
-    }
-
-    public void startTimer() {
-        timer = timerManager.createTimer(this, torchTime);
-    }
-
-    public void stopTimer() {
-        timerManager.stopTimer(timer);
     }
 }

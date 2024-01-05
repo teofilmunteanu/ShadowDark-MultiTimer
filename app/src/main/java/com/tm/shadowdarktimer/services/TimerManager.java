@@ -21,10 +21,6 @@ public class TimerManager extends Service {
         return instance;
     }
 
-    public int localTimeToMilis(LocalTime time){
-        return time.getHour() * 3600000 + time.getMinute()*60000 + time.getSecond()*1000;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,21 +28,10 @@ public class TimerManager extends Service {
     }
 
     public TorchTimer createTimer(TorchModel torchModel, LocalTime time) {
-        long totalMillis = localTimeToMilis(time);
-
-        TorchTimer torchTimer =  new TorchTimer(torchModel, totalMillis, 1000);
+        TorchTimer torchTimer =  new TorchTimer(torchModel, time);
         torchTimers.add(torchTimer);
 
-        torchTimer.start();
-
         return torchTimer;
-    }
-
-    public void stopTimer(CountDownTimer timer) {
-        //CountDownTimer timer = null; // get timer with that id from the timers list (if it gets the id as parameter)
-        if (timer != null) {
-            timer.cancel();
-        }
     }
 
     @Nullable
@@ -54,4 +39,6 @@ public class TimerManager extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    //global operations on timers
 }
