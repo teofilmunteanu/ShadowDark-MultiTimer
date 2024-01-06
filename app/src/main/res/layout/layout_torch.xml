@@ -66,7 +66,7 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <EditText
+        <com.tm.shadowdarktimer.decorated_widgets.AutoformattingTimeChange
             android:id="@+id/timeChange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -80,7 +80,8 @@
             android:hint="@string/time_change_format"
             android:inputType="time"
             android:maxLines="1"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:text="@={torchModel.timeChangeString}"/>
 
         <Button
             android:id="@+id/forward"

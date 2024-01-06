@@ -58,7 +58,7 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 //click event listener for play/pause button
                 torchViewHolder.play_pauseButton.setOnClickListener(view -> {
                     int position = torchViewHolder.getBindingAdapterPosition();
-                    TorchModel torch  = torchList.get(position); // !!!!!!!!!!!!!! !can I get the torch before pressing (when creating the view holder)??
+                    TorchModel torch  = torchList.get(position);
 
                     torchViewHolder.totalTimeInput.insertTimeLeadingZeros();
 
@@ -69,6 +69,22 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         torch.resetTime();
                     }
 
+                });
+
+                // !!!!!!! TO DO: also make custom widget for the change time
+                torchViewHolder.backwardTimeButton.setOnClickListener(view -> {
+                    int position = torchViewHolder.getBindingAdapterPosition();
+                    TorchModel torch  = torchList.get(position);
+
+                    //torchViewHolder.totalTimeInput.insertTimeLeadingZeros();
+
+                    Log.d("t change",torchViewHolder.timeChangeInput.getText()+"");
+                    /*if(TorchModel.isValidChangeString(torchViewHolder.timeChangeInput.getText()+"")){
+                        torch.fastBackward();
+                    }
+                    else{
+                        torch.resetChange();
+                    }*/
                 });
 
                 return torchViewHolder;

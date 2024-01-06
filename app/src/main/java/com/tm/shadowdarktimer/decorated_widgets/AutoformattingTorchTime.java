@@ -6,13 +6,8 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
-
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompatEditText {
     public static final int MAX_TIMER_COLONS = 2;
@@ -20,7 +15,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
     public static final int TIMER_COLON2_POS = 5;
     public static final int TIME_ELEMENT_LENGTH = 2;
 
-    public static boolean programaticallyAddedZero = false;
+    public static boolean programmaticallyAddedZero = false;
 
     public AutoformattingTorchTime(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -39,21 +34,6 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             return null;
         };
 
-        //!!!!!!!!! One solution for the colon skip input problems ---- not that clean
-        /*InputFilter colonsBeforeColonsFilter = (charSequence, start, end, dest, dstart, dend) -> {
-            if(start<end) {
-                if (charSequence.charAt(start) == ':') {
-                    //if the colon is not added at the end of the input
-                    if (dend < dest.length()){
-                        if (dest.charAt(dstart) == ':'){
-                            return "";
-                        }
-                    }
-                }
-            }
-            return null;
-        };*/
-
         //filter out invalid characters
         InputFilter digitFilter = (charSequence, start, end, dest, dstart, dend) -> {
             //if character is changed/added, not removed
@@ -69,7 +49,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                 // doesn't allow the digit to be bigger than 5
                 if (dest.length()>=dstart && dstart>=2){
                     if (dest.charAt(dstart-1)==':' || Character.isDigit(dest.charAt(dstart-2))) {
-                        if (Character.getNumericValue(c) > 5) {
+                        if (c > '5') {
                             return "";
                         }
                     }
@@ -82,7 +62,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
         InputFilter lengthFilter = new InputFilter.LengthFilter(8);
 
         // Set the filters on the EditText
-        this.setFilters(new InputFilter[]{/*colonsBeforeColonsFilter,*/extraColonFilter,digitFilter,lengthFilter});
+        this.setFilters(new InputFilter[]{extraColonFilter,digitFilter,lengthFilter});
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -97,7 +77,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             //when the user inputs :, and the hours or mins are single digit, leading 0s are added
             @Override
             public void afterTextChanged(Editable text) {
-                if (!programaticallyAddedZero){
+                if (!programmaticallyAddedZero){
                     colonFormatTorchTime();
                     colonSkipInput();
                 }
@@ -183,7 +163,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
             int lastColonPos = inputText.toString().lastIndexOf(':');
 
             if (lastColonPos != -1){
-                programaticallyAddedZero = true;
+                programmaticallyAddedZero = true;
 
                 if (lastColonPos < TIMER_COLON1_POS && inputText.length() <= TIMER_COLON1_POS){
                     insertTimeLeadingZeros(0);
@@ -192,7 +172,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                     insertTimeLeadingZeros(TIMER_COLON1_POS+1);
                 }
 
-                programaticallyAddedZero = false;
+                programmaticallyAddedZero = false;
             }
         }
     }
