@@ -1,11 +1,13 @@
 package com.tm.shadowdarktimer.models;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.tm.shadowdarktimer.BR;
+import com.tm.shadowdarktimer.adapters.TorchObserver;
 import com.tm.shadowdarktimer.services.TimerManager;
 import com.tm.shadowdarktimer.services.TimerUpdateListener;
 import com.tm.shadowdarktimer.services.TorchTimer;
@@ -13,6 +15,8 @@ import com.tm.shadowdarktimer.services.TorchTimer;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TorchModel extends BaseObservable{
     private LocalTime torchTime;
@@ -23,11 +27,14 @@ public class TorchModel extends BaseObservable{
     private static final DateTimeFormatter timeChangeFormatter = DateTimeFormatter.ofPattern("mm:ss");
 
 
-   /* private final LocalTime minTime = LocalTime.of(0,0,0);
-    private final LocalTime maxTime = LocalTime.of(99,59,59);*/
+    private static final LocalTime minTime = LocalTime.of(0,0,0);
+    private static final LocalTime maxTime = LocalTime.of(23,59,59);
 
-    public TorchModel(int hours, int minutes, int seconds){
-        this.torchTime = LocalTime.of(hours,minutes,seconds);
+    private List<TorchObserver> observers = new ArrayList<>();
+
+
+    public TorchModel(){
+        this.torchTime = LocalTime.of(1,0,0);
         timeChange = LocalTime.of(0,10,0);
         timer = TimerManager.getInstance().createTimer(this, torchTime);
     }
@@ -35,6 +42,21 @@ public class TorchModel extends BaseObservable{
     @Bindable
     public boolean getPaused(){
         return timer.isPaused();
+    }
+
+
+    public void addPauseObserver(TorchObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removePauseObserver(TorchObserver observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyPauseObservers(){
+        for (TorchObserver observer : observers){
+            observer.onPausedChanged(getPaused());
+        }
     }
 
 
@@ -79,30 +101,38 @@ public class TorchModel extends BaseObservable{
 
 
     //time change
+    public void resetTimeChange(){
+        timeChange = LocalTime.of(0,10,0);
+    }
     @Bindable
     public String getTimeChangeString(){
-
         return timeChange.format(timeChangeFormatter);
     }
 
     public void setTimeChangeString(String changeString){
         timeChange = parseTimeChangeString(changeString);
+        Log.d("timeChange",changeString);
 
         //only update the bound value if it's valid
         if (timeChange != null){
+            Log.d("good timeChange",changeString);
             notifyPropertyChanged(BR.timeChangeString);
         }
     }
 
     public static LocalTime parseTimeChangeString(String timeString){
         try {
+            Log.d("timeChange",timeString);
             return LocalTime.parse(timeString, timeChangeFormatter);
         } catch (DateTimeParseException e) {
+            Log.d("why",timeString);
             return null;
         }
     }
 
-
+    public static boolean isValidTimeChangeString(String timeString){
+        return parseTimeChangeString(timeString) != null;
+    }
 
     //TIMER OPERATIONS
     public void pauseUnpause(){
@@ -114,17 +144,19 @@ public class TorchModel extends BaseObservable{
         }
 
         notifyPropertyChanged(BR.paused);
+
+        notifyPauseObservers();
     }
 
-    /*public void fastForward(){
+    public void fastForward(){
         int torchTimeSeconds = torchTime.toSecondOfDay();
-        int changeTimeSeconds = changeTime.toSecondOfDay();
+        int changeTimeSeconds = timeChange.toSecondOfDay();
         if (torchTimeSeconds - changeTimeSeconds < 0){
             torchTime = minTime;
         }
         else{
-            torchTime.minusMinutes(changeTime.getMinute());
-            torchTime.minusSeconds(changeTime.getSecond());
+            torchTime = torchTime.minusMinutes(timeChange.getMinute());
+            torchTime = torchTime.minusSeconds(timeChange.getSecond());
         }
 
         timer.updateMillisRemaining(torchTime);
@@ -134,18 +166,20 @@ public class TorchModel extends BaseObservable{
 
     public void fastBackward(){
         int torchTimeSeconds = torchTime.toSecondOfDay();
-        int changeTimeSeconds = changeTime.toSecondOfDay();
+        int changeTimeSeconds = timeChange.toSecondOfDay();
 
         if (torchTimeSeconds + changeTimeSeconds > maxTime.toSecondOfDay()){
             torchTime = maxTime;
         }
         else{
-            torchTime.plusMinutes(changeTime.getMinute());
-            torchTime.plusSeconds(changeTime.getSecond());
+            torchTime = torchTime.plusMinutes(timeChange.getMinute());
+            torchTime = torchTime.plusSeconds(timeChange.getSecond());
+
+            Log.d("back",torchTime+"");
         }
 
         timer.updateMillisRemaining(torchTime);
 
         notifyPropertyChanged(BR.timeString);
-    }*/
+    }
 }

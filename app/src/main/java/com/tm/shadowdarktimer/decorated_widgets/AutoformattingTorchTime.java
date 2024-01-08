@@ -6,10 +6,14 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
-public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompatEditText {
+import com.tm.shadowdarktimer.adapters.TorchObserver;
+import com.tm.shadowdarktimer.models.TorchModel;
+
+public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompatEditText implements TorchObserver {
     public static final int MAX_TIMER_COLONS = 2;
     public static final int TIMER_COLON1_POS = 2;
     public static final int TIMER_COLON2_POS = 5;
@@ -17,11 +21,53 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
 
     public static boolean programmaticallyAddedZero = false;
 
+    private TorchModel torchModel;
+
+    private TextWatcher textChangeListener;
+
     public AutoformattingTorchTime(Context context, AttributeSet attrs){
         super(context, attrs);
         addTorchTimeFilters();
         addTorchTimeEvents();
     }
+
+    public void setModel(TorchModel model){
+        torchModel = model;
+        torchModel.addPauseObserver(this);
+    }
+
+    @Override
+    public void onPausedChanged(boolean paused) {
+        if (paused) {
+            addTorchTimeFilters();
+            addTorchTimeEvents();
+        } else {
+            setFilters(new InputFilter[0]);
+            setOnTouchListener(null);
+            removeTextChangedListener(textChangeListener);
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        torchModel.removePauseObserver(this);
+    }
+
+    //One way to do it - not clean -> use observers
+    /*@Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+
+        if (enabled) {
+            addTorchTimeFilters();
+            addTorchTimeEvents();
+        } else {
+            setFilters(new InputFilter[0]);
+            setOnTouchListener(null);
+            removeTextChangedListener(textChangeListener);
+        }
+    }*/
 
     public void addTorchTimeFilters(){
         //filter out colons after the first two
@@ -67,7 +113,8 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
 
     @SuppressLint("ClickableViewAccessibility")
     public void addTorchTimeEvents(){
-        this.addTextChangedListener(new TextWatcher() {
+
+        textChangeListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -82,7 +129,9 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
                     colonSkipInput();
                 }
             }
-        });
+        };
+        this.addTextChangedListener(textChangeListener);
+
 
         this.setOnTouchListener((view, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP){

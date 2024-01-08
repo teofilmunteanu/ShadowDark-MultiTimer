@@ -35,6 +35,10 @@
             android:maxLines="1"
             android:padding="10dp"
             android:text="@={torchModel.timeString}"
+            android:enabled="@{torchModel.paused}"
+            android:textColor="@{torchModel.paused ? @color/red_buttons_bg : @color/black}"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
             />
 
         <Button
@@ -50,7 +54,8 @@
             android:text="@{torchModel.paused ? @string/play_label : @string/pause_label}"
             android:textColor="@android:color/white"
             android:textSize="22sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            />
 
         <Button
             android:id="@+id/backward"
@@ -81,7 +86,10 @@
             android:inputType="time"
             android:maxLines="1"
             android:padding="10dp"
-            android:text="@={torchModel.timeChangeString}"/>
+            android:text="@={torchModel.timeChangeString}"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            />
 
         <Button
             android:id="@+id/forward"

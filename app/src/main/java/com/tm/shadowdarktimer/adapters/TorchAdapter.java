@@ -71,20 +71,23 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
                 });
 
-                // !!!!!!! TO DO: also make custom widget for the change time
                 torchViewHolder.backwardTimeButton.setOnClickListener(view -> {
                     int position = torchViewHolder.getBindingAdapterPosition();
                     TorchModel torch  = torchList.get(position);
 
-                    //torchViewHolder.totalTimeInput.insertTimeLeadingZeros();
-
-                    Log.d("t change",torchViewHolder.timeChangeInput.getText()+"");
-                    /*if(TorchModel.isValidChangeString(torchViewHolder.timeChangeInput.getText()+"")){
+                   /* if(TorchModel.isValidTimeChangeString(torchViewHolder.timeChangeInput.getText()+"")){
                         torch.fastBackward();
                     }
                     else{
-                        torch.resetChange();
+                        torch.resetTimeChange();
                     }*/
+                    torch.fastBackward();
+                });
+                torchViewHolder.forwardTimeButton.setOnClickListener(view -> {
+                    int position = torchViewHolder.getBindingAdapterPosition();
+                    TorchModel torch  = torchList.get(position);
+
+                    torch.fastForward();
                 });
 
                 return torchViewHolder;
@@ -136,6 +139,8 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         public void bind(TorchModel torch){
             binding.setTorchModel(torch);
             binding.executePendingBindings();
+
+            totalTimeInput.setModel(torch);
         }
     }
 
