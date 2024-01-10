@@ -38,7 +38,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="28sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            android:onClick="onGlobalPauseClicked"/>
 
         <View
             android:layout_width="0dp"
@@ -57,9 +58,10 @@
             android:text="@string/backward_label"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="onGlobalBackwardClicked"/>
 
-        <EditText
+        <com.tm.shadowdarktimer.decorated_widgets.AutoformattingTimeChange
             android:id="@+id/globalTimeChangeInput"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -70,10 +72,10 @@
             android:layout_weight="2"
             android:background="@color/white"
             android:gravity="center"
-            android:hint="mm:ss"
             android:inputType="time"
             android:maxLines="1"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:text="10:00"/>
 
         <Button
             android:id="@+id/globalForward"
@@ -87,7 +89,8 @@
             android:text="@string/forward_label"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="onGlobalForwardClicked"/>
     </LinearLayout>
 
     <LinearLayout
@@ -115,59 +118,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:stackFromEnd="true"
             app:reverseLayout="true"/>
-
-        <!--<ScrollView
-            android:id="@+id/torchesScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbarStyle="insideOverlay"
-            android:visibility="gone"
-            tools:visibility="gone">
-
-            <LinearLayout
-                android:id="@+id/scrollViewItemsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/addBtnContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="16dp"
-                    android:background="@color/grey_section_bg"
-                    android:orientation="horizontal">
-
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2" />
-
-                    <Button
-                        android:id="@+id/addTorchButton"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="0dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/red_buttons_bg"
-                        android:fontFamily="sans-serif-medium"
-                        android:onClick="onAddTorchClicked"
-                        android:text="+"
-                        android:textColor="@android:color/white"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:visibility="visible" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </ScrollView>-->
 
     </LinearLayout>
 
