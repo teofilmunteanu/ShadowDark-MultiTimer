@@ -52,13 +52,15 @@ public class TorchTimer{
             @Override
             public void run() {
                 if (!paused) {
-                    millisRemaining -= intervalMillis;
-
-                    torchModel.setTorchTime(millisToLocalTime(millisRemaining));
-
-                    if (millisRemaining > 0) {
+                    if (millisRemaining-intervalMillis > 0) {
+                        millisRemaining -= intervalMillis;
                         handler.postDelayed(this, intervalMillis);
                     }
+                    else{
+                        millisRemaining = 0;
+                        torchModel.pauseUnpause();
+                    }
+                    torchModel.setTorchTime(millisToLocalTime(millisRemaining));
                 }
             }
         };
