@@ -111,21 +111,18 @@ public class TorchModel extends BaseObservable{
 
     public void setTimeChangeString(String changeString){
         timeChange = parseTimeChangeString(changeString);
-        Log.d("timeChange",changeString);
 
         //only update the bound value if it's valid
         if (timeChange != null){
-            Log.d("good timeChange",changeString);
             notifyPropertyChanged(BR.timeChangeString);
         }
     }
 
     public static LocalTime parseTimeChangeString(String timeString){
         try {
-            Log.d("timeChange",timeString);
-            return LocalTime.parse(timeString, timeChangeFormatter);
+            LocalTime parseHHmm = LocalTime.parse("00:"+timeString, torchTimeFormatter);
+            return LocalTime.of(0,parseHHmm.getMinute(),parseHHmm.getSecond());
         } catch (DateTimeParseException e) {
-            Log.d("why",timeString);
             return null;
         }
     }
@@ -151,8 +148,9 @@ public class TorchModel extends BaseObservable{
     public void fastForward(){
         int torchTimeSeconds = torchTime.toSecondOfDay();
         int changeTimeSeconds = timeChange.toSecondOfDay();
+
         if (torchTimeSeconds - changeTimeSeconds < 0){
-            torchTime = minTime;
+            setTorchTime(minTime);
         }
         else{
             torchTime = torchTime.minusMinutes(timeChange.getMinute());
@@ -169,13 +167,11 @@ public class TorchModel extends BaseObservable{
         int changeTimeSeconds = timeChange.toSecondOfDay();
 
         if (torchTimeSeconds + changeTimeSeconds > maxTime.toSecondOfDay()){
-            torchTime = maxTime;
+            setTorchTime(maxTime);
         }
         else{
             torchTime = torchTime.plusMinutes(timeChange.getMinute());
             torchTime = torchTime.plusSeconds(timeChange.getSecond());
-
-            Log.d("back",torchTime+"");
         }
 
         timer.updateMillisRemaining(torchTime);

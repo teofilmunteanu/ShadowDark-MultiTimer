@@ -216,7 +216,7 @@ public class AutoformattingTorchTime extends androidx.appcompat.widget.AppCompat
     // inserts leading 0s when inputting colons, for faster inputs
     public void colonSkipInput(){
         Editable inputText = this.getText();
-        
+
         if (inputText!=null){
             int lastColonPos = inputText.toString().lastIndexOf(':');
 

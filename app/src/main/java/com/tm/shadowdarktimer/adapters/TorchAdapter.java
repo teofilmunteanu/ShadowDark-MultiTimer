@@ -75,19 +75,23 @@ public class TorchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                     int position = torchViewHolder.getBindingAdapterPosition();
                     TorchModel torch  = torchList.get(position);
 
-                   /* if(TorchModel.isValidTimeChangeString(torchViewHolder.timeChangeInput.getText()+"")){
+                   if(TorchModel.isValidTimeChangeString(torchViewHolder.timeChangeInput.getText()+"")){
                         torch.fastBackward();
                     }
                     else{
                         torch.resetTimeChange();
-                    }*/
-                    torch.fastBackward();
+                    }
                 });
                 torchViewHolder.forwardTimeButton.setOnClickListener(view -> {
                     int position = torchViewHolder.getBindingAdapterPosition();
                     TorchModel torch  = torchList.get(position);
 
-                    torch.fastForward();
+                    if(TorchModel.isValidTimeChangeString(torchViewHolder.timeChangeInput.getText()+"")){
+                        torch.fastForward();
+                    }
+                    else{
+                        torch.resetTimeChange();
+                    }
                 });
 
                 return torchViewHolder;
