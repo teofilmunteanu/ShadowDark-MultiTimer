@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red_app_bg">#581414</color>
     <color name="red_buttons_bg">#A12424</color>
+    <color name="red_time_op">#D80B0B</color>
     <color name="grey_section_bg">#171717</color>
     <color name="grey_subsection_bg">#3D3D3D</color>
     <color name="grey_inactive_time_bg">#C3C3C3</color>

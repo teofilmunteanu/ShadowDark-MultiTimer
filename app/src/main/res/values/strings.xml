@@ -8,4 +8,5 @@
     <string name="forward_label">⏭</string>
     <string name="time_format">hh:mm:ss</string>
     <string name="time_change_format">mm:ss</string>
+    <string name="plus">+</string>
 </resources>

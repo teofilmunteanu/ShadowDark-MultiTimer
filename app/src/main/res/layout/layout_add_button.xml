@@ -23,7 +23,7 @@
         android:backgroundTint="@color/red_buttons_bg"
         android:fontFamily="sans-serif-medium"
         android:onClick="onAddTorchClicked"
-        android:text="+"
+        android:text="@string/plus"
         android:textColor="@android:color/white"
         android:textSize="28sp"
         android:textStyle="bold" />
