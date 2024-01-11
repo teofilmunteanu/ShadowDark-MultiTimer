@@ -75,6 +75,9 @@
             android:inputType="time"
             android:maxLines="1"
             android:padding="10dp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="10:00"/>
 
         <Button

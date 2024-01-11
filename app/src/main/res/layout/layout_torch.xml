@@ -34,11 +34,11 @@
             android:inputType="time"
             android:maxLines="1"
             android:padding="10dp"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
             android:text="@={torchModel.timeString}"
             android:enabled="@{torchModel.paused}"
             android:textColor="@{torchModel.paused ? @color/red_buttons_bg : @color/black}"
-            android:fontFamily="monospace"
-            android:textStyle="bold"
             />
 
         <Button
@@ -51,10 +51,10 @@
             android:layout_weight="1"
             android:backgroundTint="@color/red_buttons_bg"
             android:fontFamily="sans-serif-medium"
-            android:text="@{torchModel.paused ? @string/play_label : @string/pause_label}"
             android:textColor="@android:color/white"
             android:textSize="22sp"
             android:textStyle="normal"
+            android:text="@{torchModel.paused ? @string/play_label : @string/pause_label}"
             />
 
         <Button
@@ -82,13 +82,13 @@
             android:layout_weight="2"
             android:background="@color/white"
             android:gravity="center"
-            android:hint="@string/time_change_format"
             android:inputType="time"
             android:maxLines="1"
             android:padding="10dp"
-            android:text="@={torchModel.timeChangeString}"
             android:fontFamily="monospace"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:text="@={torchModel.timeChangeString}"
             />
 
         <Button

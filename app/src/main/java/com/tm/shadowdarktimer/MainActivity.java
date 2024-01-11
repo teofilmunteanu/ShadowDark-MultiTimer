@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         for (TorchModel torch : torchList){
             if (!torch.getPaused()){
                 if(TorchModel.isValidTimeChangeString(globalChangeString)){
-                    torch.fastForward();
+                    torch.fastForward(globalChangeString);
                 }
                 else{
                     torch.resetTimeChange();
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         for (TorchModel torch : torchList){
             if (!torch.getPaused()){
                 if(TorchModel.isValidTimeChangeString(globalChangeString)){
-                    torch.fastBackward();
+                    torch.fastBackward(globalChangeString);
                 }
                 else{
                     torch.resetTimeChange();

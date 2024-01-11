@@ -145,7 +145,7 @@ public class TorchModel extends BaseObservable{
         notifyPauseObservers();
     }
 
-    public void fastForward(){
+    public void fastForward(LocalTime timeChange){
         int torchTimeSeconds = torchTime.toSecondOfDay();
         int changeTimeSeconds = timeChange.toSecondOfDay();
 
@@ -162,7 +162,18 @@ public class TorchModel extends BaseObservable{
         notifyPropertyChanged(BR.timeString);
     }
 
-    public void fastBackward(){
+    public void fastForward(String timeChangeString){
+        LocalTime timeChange = parseTimeChangeString(timeChangeString);
+        if (timeChange!=null){
+            fastForward(timeChange);
+        }
+    }
+
+    public void fastForward(){
+        fastForward(timeChange);
+    }
+
+    public void fastBackward(LocalTime timeChange){
         int torchTimeSeconds = torchTime.toSecondOfDay();
         int changeTimeSeconds = timeChange.toSecondOfDay();
 
@@ -177,5 +188,16 @@ public class TorchModel extends BaseObservable{
         timer.updateMillisRemaining(torchTime);
 
         notifyPropertyChanged(BR.timeString);
+    }
+
+    public void fastBackward(String timeChangeString){
+        LocalTime timeChange = parseTimeChangeString(timeChangeString);
+        if (timeChange!=null){
+            fastBackward(timeChange);
+        }
+    }
+
+    public void fastBackward(){
+        fastBackward(timeChange);
     }
 }
