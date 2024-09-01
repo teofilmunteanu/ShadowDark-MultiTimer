@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +48,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save necessary data, e.g., timer values, to the bundle
+        outState.putSerializable("timers", torchList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore the saved data from the bundle
+        torchList = (ArrayList<TorchModel>) savedInstanceState.getSerializable("timers");
+        // Update your RecyclerView with the restored data
+        torchAdapter.notifyItemInserted(torchList.size()-1);
     }
 
     public void onAddTorchClicked(View view){

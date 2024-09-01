@@ -12,13 +12,14 @@ import com.tm.shadowdarktimer.services.TimerManager;
 import com.tm.shadowdarktimer.services.TimerUpdateListener;
 import com.tm.shadowdarktimer.services.TorchTimer;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TorchModel extends BaseObservable{
+public class TorchModel extends BaseObservable implements Serializable {
     private LocalTime torchTime;
     private LocalTime timeChange;
     private final TorchTimer timer;
@@ -200,4 +201,5 @@ public class TorchModel extends BaseObservable{
     public void fastBackward(){
         fastBackward(timeChange);
     }
+
 }
